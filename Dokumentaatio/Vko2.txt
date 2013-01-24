@@ -1,0 +1,3 @@
+Viikkoraportti tiralabra vko 2. 24.1.2013
+
+Ohjelmointi aloitettu. Vasta minimikeko luotu. Mietitty minkälaisia verkkoja algoritmien täytyisi käydä läpi (kokonaislukumatriisi ennakkosuosikkina).
