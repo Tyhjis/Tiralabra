@@ -35,7 +35,19 @@ public class Verkkosolmu {
         return sijainti;
     }
     
+    public void setSijaintiKeossa(int i){
+        
+    }
+    
     public int getPaino(){
         return paino;
+    }
+    @Override
+    public String toString(){
+        return "Paino: "+paino+" Sijainti kartalla: "+sijainti[0]+", "+sijainti[1];
+    }
+    
+    public boolean equals(Verkkosolmu vertaa){
+        return sijainti[0] == vertaa.getSijainti()[0] && sijainti[1] == vertaa.getSijainti()[1];
     }
 }

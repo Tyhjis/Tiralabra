@@ -17,18 +17,15 @@ public class MinimikekoSolmuilla {
         keko = new Verkkosolmu[koko+1];
         heapsize = 0;
     }
-    
-    public void heapInsert(int avain, int i, int j){
+    public void heapInsert(Verkkosolmu s){
         heapsize++;
-        int k = heapsize;
-        while(k > 1 && keko[parent(k)].getPaino() > avain){
-            keko[k] = keko[parent(k)];
-            k = parent(k);
+        int i = heapsize;
+        while(i > 1 && keko[parent(i)].getPaino() > s.getPaino()){
+            keko[i] = keko[parent(i)];
+            i = parent(i);
         }
-        keko[k] = new Verkkosolmu(avain);
-        keko[k].setSijainti(i, j);
-    }
-    
+        keko[i] = s;
+    }    
     public Verkkosolmu[] getHeap(){
         return keko;
     }
@@ -49,8 +46,15 @@ public class MinimikekoSolmuilla {
         return min;
     }
     
-    public void heapDecWeight(int uusipaino, Verkkosolmu osoitin){
-        
+    public void heapDecWeight(int sijainti){
+        while(sijainti > 1 && keko[parent(sijainti)].getPaino() > keko[sijainti].getPaino()){
+            vaihdaAlkioidenPaikkaa(sijainti, parent(sijainti));
+            sijainti = parent(sijainti);
+        }
+    }
+    
+    public boolean empty(){
+        return heapsize == 0;
     }
     
     public int heapMin(int[] keko){
@@ -94,5 +98,11 @@ public class MinimikekoSolmuilla {
         Verkkosolmu apu = keko[eka];
         keko[eka] = keko[toka];
         keko[toka] = apu;
+    }
+    
+    public void tulostaKeko(){
+        for(int i = 1; i <= heapsize; i++){
+            System.out.println(keko[i].toString());
+        }
     }
 }
