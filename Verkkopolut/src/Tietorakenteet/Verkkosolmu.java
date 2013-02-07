@@ -12,6 +12,7 @@ public class Verkkosolmu {
     
     private int paino;
     private int[] sijainti;
+    private int[] tulosolmu;
     
     public Verkkosolmu(int paino){
         this.paino = paino;
@@ -33,6 +34,16 @@ public class Verkkosolmu {
     
     public int[] getSijainti(){
         return sijainti;
+    }
+    
+    public void setTulosolmu(int i, int j){
+        tulosolmu = new int[2];
+        tulosolmu[0] = i;
+        tulosolmu[1] = j;
+    }
+    
+    public int[] getTulosolmu(){
+        return tulosolmu;
     }
     
     public void setSijaintiKeossa(int i){

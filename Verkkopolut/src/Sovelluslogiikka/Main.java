@@ -6,9 +6,7 @@ package Sovelluslogiikka;
 
 import Algoritmit.BellmanFord;
 import Algoritmit.Dijkstra;
-import Tietorakenteet.Minimikeko;
-import Tietorakenteet.Verkkosolmu;
-import Tietorakenteet.Verkot;
+import Tietorakenteet.*;
 
 /**
  *
@@ -37,15 +35,25 @@ public class Main {
         tulostus(koko, koke);*/
         
         Verkot verkot = new Verkot();
-        /*Dijkstra algo = new Dijkstra(verkot.pieni3);
+        Dijkstra algo = new Dijkstra(verkot.pieni2);
         algo.algoritmi();
         Verkkosolmu[][] solmut = algo.palautaKaytyVerkko();
-        tulostus(solmut);*/
-        
-        BellmanFord algo = new BellmanFord(verkot.pieni3);
+        tulostus(solmut);
+        System.out.println("");
+        Pino polku = algo.getPolku(2,2);
+        tulostaPino(polku);
+        /*BellmanFord algo = new BellmanFord(verkot.pieni3);
         algo.algoritmi();
         int[][] verkko = algo.palautaKaytyVerkko();
-        tulostus(verkko);
+        tulostus(verkko);*/
+    }
+    
+    private static void tulostaPino(Pino polku){
+        int[] tul;
+        while(!polku.empty()){
+            tul = polku.pop();
+            System.out.println(tul[0]+", "+tul[1]);
+        }
     }
 
     private static void tulostus(int[][] verkko) {
@@ -60,8 +68,7 @@ public class Main {
             }
             System.out.println("");
         }
-    }
-    
+    }    
     
     private static void tulostus(Verkkosolmu[][] koke) {
         for(int i = 0; i < koke.length; i++){

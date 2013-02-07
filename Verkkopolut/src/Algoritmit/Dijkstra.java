@@ -6,6 +6,7 @@ package Algoritmit;
 
 import Tietorakenteet.Minimikeko;
 import Tietorakenteet.MinimikekoSolmuilla;
+import Tietorakenteet.Pino;
 import Tietorakenteet.Verkkosolmu;
 
 /**
@@ -63,7 +64,6 @@ public class Dijkstra {
             if(tarkistin(sij[0]-1, sij[1])){
                relax(sij[0], sij[1], sij[0]-1, sij[1]);
             }
-            keko.tulostaKeko();
         }
     }
     
@@ -80,11 +80,27 @@ public class Dijkstra {
         if(kaytavaverkko[i2][j2].getPaino() > kaytavaverkko[i1][j1].getPaino() + verkko[i2][j2]){
             int uusipaino = kaytavaverkko[i1][j1].getPaino() + verkko[i2][j2];
             kaytavaverkko[i2][j2].setPaino(uusipaino);
+            kaytavaverkko[i2][j2].setTulosolmu(i1, j1);
             keko.heapInsert(kaytavaverkko[i2][j2]);
-            //keko.heapDecWeight(kaytavaverkko[i2][j2].getSijaintiKeossa());
-            //return uusipaino;
         }
-        //return Integer.MAX_VALUE;
+    }
+    
+    public Pino getPolku(int i, int j){
+        Pino polku = new Pino();
+        if(tarkistin(i, j)){
+            int[] koord;
+            int ti = i;
+            int tj = j;
+            polku.push(kaytavaverkko[ti][tj].getSijainti());
+            while(kaytavaverkko[ti][tj].getTulosolmu() != null){
+                koord = kaytavaverkko[ti][tj].getTulosolmu();
+                polku.push(koord);
+                ti = koord[0];
+                tj = koord[1];
+            }
+        }
+
+        return polku;
     }
     
     public boolean tarkistin(int i, int j){
@@ -94,4 +110,5 @@ public class Dijkstra {
     public Verkkosolmu[][] palautaKaytyVerkko(){
         return kaytavaverkko;
     }
+    
 }
