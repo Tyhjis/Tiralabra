@@ -17,6 +17,12 @@ public class MinimikekoSolmuilla {
         keko = new Verkkosolmu[koko+1];
         heapsize = 0;
     }
+    
+    public MinimikekoSolmuilla(){
+        keko = new Verkkosolmu[10];
+        heapsize = 0;
+    }
+    
     public void heapInsert(Verkkosolmu s){
         heapsize++;
         int i = heapsize;

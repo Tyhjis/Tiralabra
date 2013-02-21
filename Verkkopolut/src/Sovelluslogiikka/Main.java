@@ -4,6 +4,7 @@
  */
 package Sovelluslogiikka;
 
+import Algoritmit.AStar;
 import Algoritmit.BellmanFord;
 import Algoritmit.Dijkstra;
 import Tietorakenteet.*;
@@ -35,23 +36,42 @@ public class Main {
         tulostus(koko, koke);*/
         
         Verkot verkot = new Verkot();
-        Dijkstra algo = new Dijkstra(verkot.pieni2);
+        Dijkstra algo = new Dijkstra(verkot.pieni3);
         algo.algoritmi();
         Verkkosolmu[][] solmut = algo.palautaKaytyVerkko();
-        tulostus(solmut);
+        tulostus2(solmut);
         System.out.println("");
-        Pino polku = algo.getPolku(2,2);
+        Pino polku = algo.getPolku(3,3);
         tulostaPino(polku);
-        /*BellmanFord algo = new BellmanFord(verkot.pieni3);
-        algo.algoritmi();
-        int[][] verkko = algo.palautaKaytyVerkko();
-        tulostus(verkko);*/
+        System.out.println("");
+        
+        BellmanFord bman = new BellmanFord(verkot.pieni3);
+        bman.algoritmi();
+        int[][] verkko = bman.palautaKaytyVerkko();
+        tulostus(verkko);
+        System.out.println("");
+        
+        AStar astar = new AStar(verkot.pieni3);
+        astar.algoritmi(0, 0, 3, 3);
+        Verkkosolmu[][] knots = astar.palautaKaytyVerkko();
+        tulostus(knots);
+        System.out.println("");
+        Jono Jpolku = astar.getPolku();
+        tulostaJono(Jpolku);
     }
     
     private static void tulostaPino(Pino polku){
         int[] tul;
         while(!polku.empty()){
             tul = polku.pop();
+            System.out.println(tul[0]+", "+tul[1]);
+        }
+    }
+    
+    private static void tulostaJono(Jono polku){
+        int[] tul;
+        while(!polku.isEmpty()){
+            tul = polku.dequeue();
             System.out.println(tul[0]+", "+tul[1]);
         }
     }
@@ -73,11 +93,20 @@ public class Main {
     private static void tulostus(Verkkosolmu[][] koke) {
         for(int i = 0; i < koke.length; i++){
             for(int j = 0; j < koke.length; j++){
-                if(koke[i][j].getPaino() < 10){
-                    System.out.print(koke[i][j].getPaino()+"  ");
+                    System.out.print(koke[i][j].getMatkaLoppuun()+" ");                
+            }
+            System.out.println("");
+        }
+    }
+    
+    private static void tulostus2(Verkkosolmu[][] solmut){
+        for(int i = 0; i < solmut.length; i++){
+            for(int j = 0; j < solmut.length; j++){
+                if(solmut[i][j].getPaino() < 10){
+                    System.out.print(solmut[i][j].getPaino()+"  ");
                 }
                 else{
-                    System.out.print(koke[i][j].getPaino()+" ");
+                    System.out.print(solmut[i][j].getPaino()+" ");
                 }
             }
             System.out.println("");

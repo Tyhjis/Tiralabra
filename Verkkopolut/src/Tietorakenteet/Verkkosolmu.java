@@ -13,9 +13,15 @@ public class Verkkosolmu {
     private int paino;
     private int[] sijainti;
     private int[] tulosolmu;
+    private int matkaloppuun;
+    private int matkaalkuun;
     
     public Verkkosolmu(int paino){
         this.paino = paino;
+    }
+    
+    public Verkkosolmu(){
+        
     }
     /**
      * Asettaa Verkkosolmu-olion sijainnin matriisissa. Luo uuden taulukon, joka sisältää koordinaatit järjestyksessä [i, j];
@@ -30,6 +36,22 @@ public class Verkkosolmu {
     
     public void setPaino(int paino){
         this.paino = paino;
+    }
+    
+    public void setMatkaAlkuun(int matka){
+        this.matkaalkuun = matka;
+    }
+    
+    public int getMatkaAlkuun(){
+        return matkaalkuun;
+    }
+    
+    public void setMatkaLoppuun(int matka){
+        this.matkaloppuun = matka;
+    }
+    
+    public int getMatkaLoppuun(){
+        return matkaloppuun;
     }
     
     public int[] getSijainti(){
@@ -53,6 +75,7 @@ public class Verkkosolmu {
     public int getPaino(){
         return paino;
     }
+    
     @Override
     public String toString(){
         return "Paino: "+paino+" Sijainti kartalla: "+sijainti[0]+", "+sijainti[1];

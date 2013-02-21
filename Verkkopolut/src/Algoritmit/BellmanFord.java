@@ -22,8 +22,10 @@ public class BellmanFord {
     public void algoritmi(){
         initialiseSingleSource(0,0);
         int pituus = kaytavaverkko.length;
+        int kaydytsolmut = 0;
         for (int i = 0; i < pituus; i++) {
             for (int j = 0; j < pituus; j++) {
+                kaydytsolmut++;
                 if(tarkistin(i+1, j)){
                     relax(i, j, i+1, j);
                 }
@@ -38,6 +40,7 @@ public class BellmanFord {
                 }
             }
         }
+        System.out.println("BMan-Ford: "+kaydytsolmut);
     }
     
     public boolean tarkistin(int i, int j){

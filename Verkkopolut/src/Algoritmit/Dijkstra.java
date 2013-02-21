@@ -48,8 +48,10 @@ public class Dijkstra {
         Verkkosolmu vuorossa;
         initialiseSingleSource();
         //vieAlkiotKekoon();
+        int kaydytsolmut = 0;
         keko.heapInsert(kaytavaverkko[0][0]);
         while(!keko.empty()){
+            kaydytsolmut++;
             vuorossa = keko.heapDelMin();
             sij = vuorossa.getSijainti();
             if(tarkistin(sij[0], sij[1]+1)){
@@ -65,6 +67,7 @@ public class Dijkstra {
                relax(sij[0], sij[1], sij[0]-1, sij[1]);
             }
         }
+        System.out.println("Dijkstra: "+kaydytsolmut);
     }
     
     public void vieAlkiotKekoon(){
