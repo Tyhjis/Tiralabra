@@ -20,7 +20,10 @@ public class AStar {
     Verkkosolmu[][] kaytavaverkko;
     MinimikekoSolmuilla keko;
     Jono polku;
-    
+    /**
+     * Konstruktori. Asettaa verkon.
+     * @param verkko Kokonaislukutaulukko.
+     */
     public AStar(int[][] verkko){
         this.verkko = verkko;
         int pituus = verkko.length;
@@ -28,11 +31,20 @@ public class AStar {
         kaytavaverkko = new Verkkosolmu[pituus][pituus];
         keko = new MinimikekoSolmuilla(maara);
     }
-    
+    /**
+     * Asettaa haluttaessa uuden verkon.
+     * @param verkko Kokonaislukutaulukko.
+     */
     public void setGraph(int[][] verkko){
         this.verkko = verkko;
     }
-    
+    /**
+     * 
+     * @param iAlku
+     * @param jAlku
+     * @param iLoppu
+     * @param jLoppu 
+     */
     public void algoritmi(int iAlku, int jAlku, int iLoppu, int jLoppu){
         asetaVerkonArvioidutEtaisyydet(iAlku, jAlku, iLoppu, jLoppu);
         Verkkosolmu vuorossa = kaytavaverkko[iAlku][jAlku];
@@ -73,12 +85,12 @@ public class AStar {
                 kaytavaverkko[i][j] = new Verkkosolmu();
                 kaytavaverkko[i][j].setSijainti(i, j);
                 kaytavaverkko[i][j].setPaino(Integer.MAX_VALUE);
-                kaytavaverkko[i][j].setMatkaLoppuun(arvioiEtaisyysLoppuun(i, j, iLoppu, jLoppu));
+                kaytavaverkko[i][j].setMatkaLoppuun(arvioiEtaisyysPisteeseen(i, j, iLoppu, jLoppu));
             }
         }
     }
     
-    public int arvioiEtaisyysLoppuun(int i1, int j1, int i2, int j2){        
+    public int arvioiEtaisyysPisteeseen(int i1, int j1, int i2, int j2){        
         return Math.abs(i1-i2)+Math.abs(j1-j2);
     }
     
