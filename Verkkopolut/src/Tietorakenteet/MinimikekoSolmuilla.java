@@ -19,7 +19,7 @@ public class MinimikekoSolmuilla {
     }
     
     public MinimikekoSolmuilla(){
-        keko = new Verkkosolmu[10];
+        keko = new Verkkosolmu[11];
         heapsize = 0;
     }
     

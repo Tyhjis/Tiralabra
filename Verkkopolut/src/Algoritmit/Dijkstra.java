@@ -29,7 +29,7 @@ public class Dijkstra {
         this.verkko = verkko;
     }
     
-    public void initialiseSingleSource(){
+    public void initialiseSingleSource(int iAlku, int jAlku){
         if(verkko != null){
             int pituus = verkko.length;
             kaytavaverkko = new Verkkosolmu[pituus][pituus];
@@ -39,17 +39,17 @@ public class Dijkstra {
                     kaytavaverkko[i][j].setSijainti(i, j);
                 }
             }
-            kaytavaverkko[0][0].setPaino(0);
+            kaytavaverkko[iAlku][jAlku].setPaino(0);
         }
     }
     
-    public void algoritmi(){
+    public void algoritmi(int iAlku, int jAlku){
         int[] sij;
         Verkkosolmu vuorossa;
-        initialiseSingleSource();
+        initialiseSingleSource(iAlku, jAlku);
         //vieAlkiotKekoon();
         int kaydytsolmut = 0;
-        keko.heapInsert(kaytavaverkko[0][0]);
+        keko.heapInsert(kaytavaverkko[iAlku][jAlku]);
         while(!keko.empty()){
             kaydytsolmut++;
             vuorossa = keko.heapDelMin();
@@ -90,11 +90,13 @@ public class Dijkstra {
     
     public Pino getPolku(int i, int j){
         Pino polku = new Pino();
+        System.out.println("Dijkstran polunhaku");
         if(tarkistin(i, j)){
             int[] koord;
             int ti = i;
             int tj = j;
             polku.push(kaytavaverkko[ti][tj].getSijainti());
+            koord = kaytavaverkko[ti][tj].getTulosolmu();
             while(kaytavaverkko[ti][tj].getTulosolmu() != null){
                 koord = kaytavaverkko[ti][tj].getTulosolmu();
                 polku.push(koord);

@@ -4,6 +4,7 @@
  */
 package Sovelluslogiikka;
 
+import Tietorakenteet.Verkkogeneraattori;
 import Algoritmit.AStar;
 import Algoritmit.BellmanFord;
 import Algoritmit.Dijkstra;
@@ -34,38 +35,86 @@ public class Main {
         koke = heap.getHeap();
         koko = heap.getHeapSize();
         tulostus(koko, koke);*/
-        
+        Kello aika = new Kello();
+        Verkkogeneraattori gen = new Verkkogeneraattori();
+        int[][] verkko = gen.generoiLabyrintti(100, 1, 1, 45, 30);
+        int pituus = verkko.length - 1;
         Verkot verkot = new Verkot();
-        Dijkstra algo = new Dijkstra(verkot.pieni3);
-        algo.algoritmi();
+        Pino polku1;
+        Pino polku2;
+        Pino polku3;
+        Visualisoija v = new Visualisoija();
+        v.setVerkko(verkko);
+        
+        Dijkstra algo = new Dijkstra(verkko);
+        aika.aloita();
+        algo.algoritmi(1, 1);
+        aika.lopeta();
+        System.out.println(aika.getAika()+" ms");
         Verkkosolmu[][] solmut = algo.palautaKaytyVerkko();
-        tulostus2(solmut);
+        
         System.out.println("");
-        Pino polku = algo.getPolku(3,3);
-        tulostaPino(polku);
+        polku1 = algo.getPolku(45,30);
+        tulostaPino(polku1);
         System.out.println("");
         
-        BellmanFord bman = new BellmanFord(verkot.pieni3);
-        bman.algoritmi();
-        int[][] verkko = bman.palautaKaytyVerkko();
-        tulostus(verkko);
+        BellmanFord bman = new BellmanFord(verkko);
+        aika.aloita();
+        bman.algoritmi(1, 1);
+        aika.lopeta();
+        System.out.println(aika.getAika()+" ms");
+        
+        System.out.println("");
+        polku2 = bman.getPolku(45, 30);
+        tulostaPino(polku2);
         System.out.println("");
         
-        AStar astar = new AStar(verkot.pieni3);
-        astar.algoritmi(0, 0, 3, 3);
+        AStar astar = new AStar(verkko);
+        aika.aloita();
+        astar.algoritmi(1, 1, 45,30);
+        aika.lopeta();
+        System.out.println(aika.getAika()+" ms");
         Verkkosolmu[][] knots = astar.palautaKaytyVerkko();
-        tulostus(knots);
-        System.out.println("");
-        Jono Jpolku = astar.getPolku();
-        tulostaJono(Jpolku);
+        polku3 = astar.getPolku(45,30);
+       // v.visualisoiPolut(polku1, polku3);
+        //v.visualisoiPolku(polku3);
+        tulostaPino(polku3);
+        //v.tulostaVerkko();
+        //String tark = tarkistaOnkoPolutSamat(polku1, polku3);
+        Laskin laskin = new Laskin();
+        //System.out.println("Dijkstran relaksointi: "+laskin.laskeRelaksoitujenNodejenMaara(solmut));
+        System.out.println("A*:n relaksointi: "+laskin.laskeRelaksoitujenNodejenMaara(knots));
+        //System.out.println(tark);*/
+    }
+    
+    private static String tarkistaOnkoPolutSamat(Pino pino1, Pino pino2){
+        Pino comp1 = pino1;
+        Pino comp2 = pino2;
+        if(pino1.getSize() != pino2.getSize()){
+            return "Pinot olivat eri kokoiset: Dijkstra: "+pino1.getSize()+" A*: "+pino2.getSize();
+        }
+        System.out.println("Polkujen pituudet: "+pino1.getSize());
+        int[] vert1;
+        int[] vert2;
+        int ind = 0;
+        while(!comp1.empty()){
+            ind++;
+            vert1 = comp1.pop();
+            vert2 = comp2.pop();
+            if(vert1[0] != vert2[0] || vert1[1] != vert2[1]){
+                return "Alkiot olivat erilaiset: Dijkstra: ("+vert1[0]+", "+vert1[1]+") A*: ("+vert2[0]+", "+vert2[1]+") indeksi: "+ind;
+            }
+        }
+        return "Polut olivat samanlaiset";
     }
     
     private static void tulostaPino(Pino polku){
-        int[] tul;
-        while(!polku.empty()){
+        //int[] tul;
+        System.out.println("Pituus: "+polku.getSize());
+        /*while(!polku.empty()){
             tul = polku.pop();
             System.out.println(tul[0]+", "+tul[1]);
-        }
+        }*/
     }
     
     private static void tulostaJono(Jono polku){
@@ -94,6 +143,13 @@ public class Main {
         for(int i = 0; i < koke.length; i++){
             for(int j = 0; j < koke.length; j++){
                     System.out.print(koke[i][j].getMatkaLoppuun()+" ");                
+            }
+            System.out.println("");
+        }
+        System.out.println("");
+        for(int i = 0; i < koke.length; i++){
+            for(int j = 0; j < koke.length; j++){
+                    System.out.print(koke[i][j].getMatkaAlkuun()+" ");                
             }
             System.out.println("");
         }

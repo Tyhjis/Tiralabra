@@ -4,6 +4,10 @@
  */
 package Algoritmit;
 
+import Tietorakenteet.Jono;
+import Tietorakenteet.Pino;
+import Tietorakenteet.Verkkosolmu;
+
 /**
  *
  * @author Krisu
@@ -11,7 +15,9 @@ package Algoritmit;
 public class BellmanFord {
     
     int[][] verkko;
-    int[][] kaytavaverkko;
+    Verkkosolmu[][] kaytavaverkko;
+    int[] viimeisinkoordinaatti;
+    private Jono jono;
     /**
      * Konstruktori.
      * @param verkko asettaa läpikäytävän verkon.
@@ -19,7 +25,8 @@ public class BellmanFord {
     public BellmanFord(int[][] verkko){
         this.verkko = verkko;
         int pituus = verkko.length;
-        kaytavaverkko = new int[pituus][pituus];
+        kaytavaverkko = new Verkkosolmu[pituus][pituus];
+        jono = new Jono();
     }
     /**
      * Setteri Vaihtaa verkkoa haluttaessa.
@@ -31,28 +38,34 @@ public class BellmanFord {
     /**
      * Toteuttaa algoritmin.
      */
-    public void algoritmi(){
-        initialiseSingleSource(0,0);
+    public void algoritmi(int iAlku, int jAlku){
+        initialiseSingleSource(iAlku,jAlku);
         int pituus = kaytavaverkko.length;
         int kaydytsolmut = 0;
-        for (int i = 0; i < pituus; i++) {
-            for (int j = 0; j < pituus; j++) {
-                kaydytsolmut++;
-                if(tarkistin(i+1, j)){
-                    relax(i, j, i+1, j);
-                }
-                if(tarkistin(i-1, j)){
-                    relax(i, j, i-1, j);
-                }
-                if(tarkistin(i, j+1)){
-                    relax(i, j, i, j+1);
-                }
-                if(tarkistin(i, j-1)){
-                    relax(i, j, i, j-1);
-                }
-            }
+        int[] sijainti;
+        jono.queue(iAlku, jAlku);
+        while(!jono.isEmpty()){
+            kaydytsolmut++;
+            sijainti = jono.dequeue();
+            relaksoiVierussolmut(sijainti[0], sijainti[1]);
         }
+        kaytavaverkko[iAlku][jAlku].poistaTulosolmu();
         System.out.println("BMan-Ford: "+kaydytsolmut);
+    }
+
+    private void relaksoiVierussolmut(int i, int j) {
+        if(tarkistin(i+1, j)){
+            relax(i, j, i+1, j);
+        }
+        if(tarkistin(i-1, j)){
+            relax(i, j, i-1, j);
+        }
+        if(tarkistin(i, j+1)){
+            relax(i, j, i, j+1);
+        }
+        if(tarkistin(i, j-1)){
+            relax(i, j, i, j-1);
+        }
     }
     /**
      * Tarkistaa, onko annetut koordinaatit verkon (eli kaksiulotteisen kokonaislukutaulukon) rajojen sisäpuolella.
@@ -72,10 +85,11 @@ public class BellmanFord {
         int pituus = kaytavaverkko.length;
         for (int i = 0; i < pituus; i++) {
             for (int j = 0; j < pituus; j++) {
-                kaytavaverkko[i][j] = Integer.MAX_VALUE;
+                kaytavaverkko[i][j] = new Verkkosolmu(Integer.MAX_VALUE);
+                kaytavaverkko[i][j].setSijainti(i, j);
             }
         }
-        kaytavaverkko[a][b] = 0;
+        kaytavaverkko[a][b].setPaino(0);
     }
     /**
      * Asettaa solmulle uuden painon, jos uusi on kevyempi kuin vanha.
@@ -85,16 +99,38 @@ public class BellmanFord {
      * @param j2 Kohdesolmun sarakkeen koordinaatti.
      */
     public void relax(int i1, int j1, int i2, int j2){
-        int uusipaino = kaytavaverkko[i1][j1] + verkko[i2][j2];
-        if(kaytavaverkko[i2][j2] > uusipaino){
-            kaytavaverkko[i2][j2] = uusipaino;
+        if(kaytavaverkko[i1][j1].getPaino() < Integer.MAX_VALUE){
+            int uusipaino = kaytavaverkko[i1][j1].getPaino() + verkko[i2][j2];
+            if(kaytavaverkko[i2][j2].getPaino() > uusipaino){
+                kaytavaverkko[i2][j2].setPaino(uusipaino);
+                kaytavaverkko[i2][j2].setTulosolmu(i1, j1);
+                jono.queue(i2, j2);
+            }
         }
     }
     /**
-     * Palauttaa käydyn verkon uusine solmuineen.
+     * Palauttaa käydyn verkon uusine painoineen.
      * @return Kokonaislukutaulukko.
      */
-    public int[][] palautaKaytyVerkko(){
+    public Verkkosolmu[][] palautaKaytyVerkko(){
         return kaytavaverkko;
+    }
+    
+    public Pino getPolku(int i, int j){
+        Pino polku = new Pino();
+        if(tarkistin(i, j)){
+            int[] koord;
+            int ti = i;
+            int tj = j;
+            polku.push(kaytavaverkko[ti][tj].getSijainti());
+            while(kaytavaverkko[ti][tj].getTulosolmu() != null){
+                koord = kaytavaverkko[ti][tj].getTulosolmu();
+                polku.push(koord);
+                ti = koord[0];
+                tj = koord[1];
+            }
+        }
+
+        return polku;
     }
 }
