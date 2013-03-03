@@ -101,10 +101,16 @@ public class Verkkosolmu {
         this.tulosolmu = null;
     }
     /**
-     * Asettaa solmun suljetuksi. Hyädynnetään A*-algoritmissa. Edustaa ns. "Suljettua joukkoa".
+     * Asettaa solmun suljetuksi. Hyödynnetään A*-algoritmissa. Edustaa ns. "Suljettua joukkoa". Hyödynnetään myös Bellman-Fordissa, jotta samaa solmua ei laiteta samaan jonoon.
      */
     public void asetaSuljetuksi(){
         this.suljettu = true;
+    }
+    /**
+     * Asettaa solmun avatuksi. Hyödynnetään Bellman-Ford -algoritmissa.
+     */
+    public void asetaAvatuksi(){
+        this.suljettu = false;
     }
     /**
      * Kertoo, onko solmu suljetussa joukossa. Hyödynnetään A*-algoritmissa.

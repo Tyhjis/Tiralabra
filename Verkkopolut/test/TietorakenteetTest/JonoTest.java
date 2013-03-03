@@ -69,7 +69,7 @@ public class JonoTest {
         testi2[0] = 0;
         testi2[1] = 0;
         while(!jono.isEmpty()){
-            jono.dequeue();
+            testi = jono.dequeue();
             assertTrue(Arrays.equals(testi, testi2));
             testi2[0]++;
             testi2[1]++;

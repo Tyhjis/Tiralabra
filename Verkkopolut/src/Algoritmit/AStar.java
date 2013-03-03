@@ -71,7 +71,7 @@ public class AStar {
             laskeVierussolmujenPainot(sijainti[0], sijainti[1]);
         }
         kaytavaverkko[iAlku][jAlku].poistaTulosolmu();
-        System.out.println("A*: "+lkm);
+        System.out.println("A*:n käytyjen solmujen lkm: "+lkm);
     }
     /**
      * 

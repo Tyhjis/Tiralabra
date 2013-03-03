@@ -9,7 +9,9 @@ package Tietorakenteet;
  * @author Krisu
  */
 public class Verkot {
-    
+    /**
+     * Sisältää pienet kovakoodatut verkot.
+     */
     public final int pieni[][] = new int [][] {{0, 4, 1},{2, 3, 1},{1, 5, 2}};
     public final int pieni2[][] = new int [][] {{0, 1, 3},{3, 2, 2},{1, 4, 5}};
     public final int pieni3[][] = new int [][] {{0,1,1,1},{2,3,5,1},{4,7,6,1},{5,5,8,1}};

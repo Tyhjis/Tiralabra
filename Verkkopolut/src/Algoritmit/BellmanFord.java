@@ -23,17 +23,25 @@ public class BellmanFord {
      * @param verkko asettaa läpikäytävän verkon.
      */
     public BellmanFord(int[][] verkko){
+        asetaOliomuuttujat(verkko);
+    }
+
+    private void asetaOliomuuttujat(int[][] verkko) {
         this.verkko = verkko;
         int pituus = verkko.length;
         kaytavaverkko = new Verkkosolmu[pituus][pituus];
         jono = new Jono();
+    }
+    
+    public BellmanFord(){
+        
     }
     /**
      * Setteri Vaihtaa verkkoa haluttaessa.
      * @param verkko 
      */
     public void setGraph(int[][] verkko){
-        this.verkko = verkko;
+        asetaOliomuuttujat(verkko);
     }
     /**
      * Toteuttaa algoritmin.
@@ -47,12 +55,18 @@ public class BellmanFord {
         while(!jono.isEmpty()){
             kaydytsolmut++;
             sijainti = jono.dequeue();
+            kaytavaverkko[sijainti[0]][sijainti[1]].asetaAvatuksi();
             relaksoiVierussolmut(sijainti[0], sijainti[1]);
         }
         kaytavaverkko[iAlku][jAlku].poistaTulosolmu();
-        System.out.println("BMan-Ford: "+kaydytsolmut);
+        System.out.println("BMan-Fordin käytyjen solmujen lkm: "+kaydytsolmut);
     }
 
+    /**
+     * Relaksoi vuorossa olevan solmun kaikki vierussolmut.
+     * @param i
+     * @param j 
+     */
     private void relaksoiVierussolmut(int i, int j) {
         if(tarkistin(i+1, j)){
             relax(i, j, i+1, j);
@@ -92,7 +106,7 @@ public class BellmanFord {
         kaytavaverkko[a][b].setPaino(0);
     }
     /**
-     * Asettaa solmulle uuden painon, jos uusi on kevyempi kuin vanha.
+     * Asettaa solmulle uuden painon, jos uusi on kevyempi kuin vanha. Lisää solmun samalla jonoon myöhempää käsittelyä varten.
      * @param i1 Tulosolmun rivin koordinaatti.
      * @param j1 Tulosolmun sarakkeen koordinaatti.
      * @param i2 Kohdesolmun rivin koordinaatti.
@@ -104,7 +118,10 @@ public class BellmanFord {
             if(kaytavaverkko[i2][j2].getPaino() > uusipaino){
                 kaytavaverkko[i2][j2].setPaino(uusipaino);
                 kaytavaverkko[i2][j2].setTulosolmu(i1, j1);
-                jono.queue(i2, j2);
+                if(!kaytavaverkko[i2][j2].onkoSuljettu()){
+                    jono.queue(i2, j2);
+                    kaytavaverkko[i2][j2].asetaSuljetuksi();
+                }                
             }
         }
     }
@@ -115,7 +132,12 @@ public class BellmanFord {
     public Verkkosolmu[][] palautaKaytyVerkko(){
         return kaytavaverkko;
     }
-    
+    /**
+     * Generoi ja palauttaa polun halutusta solmusta alkusolmuun.
+     * @param i Maalisolmun rivin indeksi.
+     * @param j Maalisolmun sarakkeen indeksi.
+     * @return Palauttaa Pinon, joka sisältää polun aloitussolmusta kohdesolmuun.
+     */
     public Pino getPolku(int i, int j){
         Pino polku = new Pino();
         if(tarkistin(i, j)){
